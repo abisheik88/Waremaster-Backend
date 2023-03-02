@@ -3,7 +3,6 @@ const User = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs")
 
-
 //Generate Token
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "1d" })
@@ -69,7 +68,6 @@ const registerUser = asyncHandler(async (req, res) => {
 
 //Login User
 const loginUser = asyncHandler(async (req, res) => {
-
     const { email, password } = req.body
 
     //Validate Request
@@ -128,10 +126,48 @@ const logout = asyncHandler(async (req, res) => {
         secure: true
     });
     return res.status(200).json({ message: "Successfully Logged Out" })
+});
+
+//Get User Data
+const getUser = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.user._id)
+
+    if (user) {
+        const { _id, name, email, photo, phone, bio } = user;
+        res.status(200).json({
+            _id,
+            name,
+            email,
+            photo,
+            phone,
+            bio,
+        });
+    } else {
+        res.status(400);
+        throw new Error("User Not Found")
+    }
+});
+
+//Get Login Status
+const loginStatus = asyncHandler(async (req, res) => {
+
+    const token = req.cookies.token;
+    if (!token) {
+        return res.json(false)
+    }
+
+    //Verify Token
+    const verified = jwt.verify(token, process.env.JWT_SECRET);
+    if (verified) {
+        return res.json(true);
+    }
+    return res.json(false);
 })
 
 module.exports = {
     registerUser,
     loginUser,
     logout,
+    getUser,
+    loginStatus
 }; 
