@@ -18,7 +18,6 @@ const tokenSchema = mongoose.Schema({
         type: Date,
         required: true,
     },
-
 })
 
 const Token = mongoose.model("Token", tokenSchema)
