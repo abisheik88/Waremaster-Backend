@@ -18,7 +18,7 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }))
 app.use(bodyParser.json());
 app.use(cors({
-    origin: ["http://localhost:3000", "https://64083d2f59526e780a87cbc2--chic-sunburst-cc5351.netlify.app/"],
+    origin: ["http://localhost:3000", "https://bucolic-florentine-d70db6.netlify.app/"],
     credentials: true
 }));
 
